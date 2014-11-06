@@ -36,7 +36,11 @@ class I5(override val id: String = "item 5") extends UniqueItem(id)
 
 class Apriori(val transactions: List[List[UniqueItem]], val minSupportCount: Int = 2) {
 
-  def findAndFilterCandidates(): Map[UniqueItem, Int] = {
+  def filter1ItemCandidates(): Map[UniqueItem, Int] = {
     transactions.flatten groupBy (i => i) mapValues (_.size) filter (_._2 >= minSupportCount)
+  }
+
+  def generateAndFilter2ItemCandidates(items: Set[UniqueItem]): Map[Set[UniqueItem], Int] = {
+    Map(Set(new I1, new I2) -> 0)
   }
 }
