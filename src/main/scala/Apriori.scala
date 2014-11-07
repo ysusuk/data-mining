@@ -36,11 +36,29 @@ class I5(override val id: String = "item 5") extends UniqueItem(id)
 
 class Apriori(val transactions: List[List[UniqueItem]], val minSupportCount: Int = 2) {
 
-  def filter1ItemCandidates(): Map[UniqueItem, Int] = {
+  def countAndFilter1ItemCandidates(): Map[UniqueItem, Int] = {
     transactions.flatten groupBy (i => i) mapValues (_.size) filter (_._2 >= minSupportCount)
   }
 
-  def generateAndFilter2ItemCandidates(items: Set[UniqueItem]): Map[Set[UniqueItem], Int] = {
-    Map(Set(new I1, new I2) -> 0)
+  // counts only one occurrance of items in transation
+  def generateCountAndFilter2ItemCandidates(items: List[UniqueItem]): Map[(UniqueItem, UniqueItem), Int] = {
+    def generate(items: List[UniqueItem]): List[(UniqueItem, UniqueItem)] = items match {
+      case List() => Nil
+      case x :: xs => xs.map(item => (x, item)) union generate(xs)
+    }
+
+    def count(candidates: List[(UniqueItem, UniqueItem)]) = for {
+      transaction <- transactions
+      candidate <- candidates
+      if transaction.contains(candidate._1) && transaction.contains(candidate._2)
+    } yield candidate
+
+    var generated = generate(items)
+    println("generated: " + generated)
+
+    var generatedAndCounted = count(generated)
+    println("generated and counted: " + generatedAndCounted)
+
+    generatedAndCounted groupBy (c => c) mapValues (_.size) filter(_._2 >= minSupportCount)
   }
 }
