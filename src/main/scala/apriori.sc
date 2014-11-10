@@ -27,3 +27,6 @@ val c = for {
   if transaction.contains(candidate._1) && transaction.contains(candidate._2)
 } yield candidate
 
+var unique = Set(new I1, new I2, new I3, new I4, new I5)
+
+unique union unique
