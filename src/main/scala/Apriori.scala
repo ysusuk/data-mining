@@ -40,7 +40,7 @@ class Apriori(val transactions: List[List[UniqueItem]], val minSupportCount: Int
     transactions.flatten groupBy (i => i) mapValues (_.size) filter (_._2 >= minSupportCount)
   }
 
-  // counts only one occurrance of items in transation
+  // counts only one occurrence of the item in transaction
   def generateCountAndFilter2CandidateItemSets(items: Set[Set[UniqueItem]]): Map[Set[UniqueItem], Int] = {
     putIfExists(generateCandidateItemSets(items, 2)) groupBy (c => c) mapValues (_.size) filter (_._2 >= minSupportCount)
   }
